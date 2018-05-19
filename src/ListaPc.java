@@ -124,12 +124,19 @@ public class ListaPc implements Serializable
 	 * @throws ListaPcException  Eccezione sollevata nel caso in cui nella lista non siano presenti computer
 	 * @throws IOException che si verifica con una mancata lettura
 	 * @throws NumberFormatException che si verifica con un inserimento dato non conforme
+	 * @throws FileException Eccezione che si verifica nel caso in cui il file su cui scrivere è già aperto in lettura.
 	 */
-	public int eliminaComputer2(int identificativo) throws ListaPcException, NumberFormatException, IOException
+	public void eliminaComputer2(String nomeFile) throws ListaPcException, NumberFormatException, IOException, FileException
 	{
 		if(elementi==0)
 			throw new ListaPcException("lista pc vuota");
 		Nodo p;
+		TextFile file=new TextFile(nomeFile,'W');
+		String computerCSV;
+		Pc computer;
+		int identificativo;
+		System.out.println("Inserisci l'identificativo del pc ");
+		identificativo=(tastiera.readInt());
 		for (int i = 1; i <= getElementi(); i++) 
 		{
 			p=getLinkPosizione(i);
@@ -138,15 +145,37 @@ public class ListaPc implements Serializable
 				if (elementi==1)
 				{
 					head=null;
-					return 1;
+					elementi--;
+					System.out.println("Eliminazione del pc eseguita con successo");
+					System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
+					computer=getPc(i);
+					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
+					file.toFile(computerCSV);	
 				}
+				else if (i==1)
+				{
+					head=getLinkPosizione(i+1);
+					elementi--;
+					System.out.println("Eliminazione del pc eseguita con successo");
+					System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
+					computer=getPc(i);
+					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
+					file.toFile(computerCSV);	
+				}
+				else
+				{
 				Nodo precedente=getLinkPosizione(i-1);
 				precedente.setLink(p.getLink());
 				elementi--;		
-				return 1;
+				System.out.println("Eliminazione del pc eseguita con successo");
+				System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
+				computer=getPc(i);
+				computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
+				file.toFile(computerCSV);	
+				}
 			}
-		}	
-		return 0;
+		}
+		file.close();
 	}
 	
 	/**	 
@@ -469,13 +498,13 @@ public class ListaPc implements Serializable
 	 */
 	public String toString()
 	{
-		String risultato="ListaPc ";
+		String risultato="ListaPc";
 		if(elementi==0)
 			return risultato+="--> ";//se non ho elementi avro head con la freccia
 		Nodo p=head;
 		while(p!=null)
 		{
-			risultato+="--> "+p.getInfo().toString()+'\n';
+			risultato+="-->"+p.getInfo().toString()+'\n';
 			p=p.getLink();
 		}
 		return risultato;

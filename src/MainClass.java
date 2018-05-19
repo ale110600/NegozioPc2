@@ -128,18 +128,9 @@ public class MainClass {
 					break;
 					case 2:
 					{
-						try
-						{
-							int identificativo;
-							System.out.println("Inserisci l'identificativo del pc ");
-							identificativo=(tastiera.readInt());
-							if (listaPc.eliminaComputer2(identificativo)==1)
-							{
-							System.out.println("Eliminazione del pc eseguita con successo");
 							try
 							{
-								System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
-								listaPc.esportaCSV2(identificativo,"pcEliminati.txt");
+								listaPc.eliminaComputer2("pcEliminati.txt");
 							}
 							catch (IOException e)
 							{
@@ -153,22 +144,10 @@ public class MainClass {
 							{
 								System.out.println("errore, il file su cui deve scrivere è già aperto in una operazione di lettura ");
 							}
+							catch(NumberFormatException e)
+							{
+								System.out.println("Errore, inserimento di un dato non conforme ");
 							}
-							else
-								System.out.println("Identificativo inesistente ");
-						}
-						catch(ListaPcException e)
-						{
-							System.out.println("Errore, non è presente alcun pc nella lista ");
-						}
-						catch(IOException e)
-						{
-							System.out.println("Errore, mancata lettura della lista ");
-						}
-						catch(NumberFormatException e)
-						{
-							System.out.println("Errore, inserimento di un dato non conforme ");
-						}
 					}
 					break;
 					case 3:
