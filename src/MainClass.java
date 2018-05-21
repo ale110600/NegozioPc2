@@ -54,7 +54,6 @@ public class MainClass {
 						Pc p=new Pc(0, "", 0);
 						try 
 						{
-						//	int i;
 						//	do
 						//	{
 							System.out.println("Inserisci il codice identificativo del pc ");
@@ -88,37 +87,19 @@ public class MainClass {
 					{	
 						try
 						{
-							if (listaPc.eliminaComputer1()==1)
-							{
-							System.out.println("Eliminazione del pc eseguita con successo");
-							try
-							{
-								System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
-								listaPc.esportaCSV1("pcEliminati.txt");
-							}
-							catch (IOException e)
-							{
-								System.out.println("Errore, non è possbile accedere al file");
-							}
-							catch (ListaPcException e) 
-							{
-								System.out.println("Non esistono pc da eliminare nella lista ");
-							}	
-							catch(FileException e)
-							{
-								System.out.println("errore, il file su cui deve scrivere è già aperto in una operazione di lettura ");
-							}
-							}
-							else
-								System.out.println("Nome inesistente ");
+							listaPc.eliminaComputer1("pcEliminati.txt");
 						}
-						catch(ListaPcException e)
+						catch (IOException e)
 						{
-							System.out.println("Errore, non è presente alcun pc nella lista ");
+							System.out.println("Errore, non è possbile accedere al file");
 						}
-						catch(IOException e)
+						catch (ListaPcException e) 
 						{
-							System.out.println("Errore, mancata lettura della lista ");
+							System.out.println("Non esistono pc da eliminare nella lista ");
+						}	
+						catch(FileException e)
+						{
+							System.out.println("errore, il file su cui deve scrivere è già aperto in una operazione di lettura ");
 						}
 						catch(NumberFormatException e)
 						{

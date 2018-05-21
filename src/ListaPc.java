@@ -83,23 +83,24 @@ public class ListaPc implements Serializable
 	}
 	
 	/**
-	 * Consente di eliminare un pc all'interno della lista inserendo il nome
+	 * Consente di eliminare un pc all'interno della lista inserendo il nome del pc, poi esporta l'identificativo e 
+	 * il nome del pc su un file di testo
 	 * @throws ListaPcException  Eccezione sollevata nel caso in cui nella lista non siano presenti computer
-	  * @throws IOException che si verifica con una mancata lettura
+	 * @throws IOException che si verifica con una mancata lettura
 	 * @throws NumberFormatException che si verifica con un inserimento dato non conforme
+	 * @throws FileException Eccezione che si verifica nel caso in cui il file su cui scrivere è già aperto in lettura.
 	 */
-	public int eliminaComputer1() throws ListaPcException, NumberFormatException, IOException
+	public void eliminaComputer1(String nomeFile) throws ListaPcException, NumberFormatException, IOException, FileException
 	{
 		if(elementi==0)
 			throw new ListaPcException("lista pc vuota");
 		Nodo p;
+		TextFile file=new TextFile(nomeFile,'W');
+		String computerCSV;
+		Pc computer;
 		String nome;
 		System.out.println("Inserisci il nome del pc ");
 		nome=(tastiera.readString());
-		if (elementi==1)
-		{
-			head=null;
-		}
 		for (int i = 1; i <= getElementi(); i++) 
 		{
 			p=getLinkPosizione(i);
@@ -107,20 +108,43 @@ public class ListaPc implements Serializable
 			{
 				if (elementi==1)
 				{
+					computer=getPc(i);
+					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
+					file.toFile(computerCSV);	
 					head=null;
-					return 1;
+					elementi--;
+					System.out.println("Eliminazione del pc eseguita con successo");
+					System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
 				}
+				else if (i==1)
+				{
+					computer=getPc(i);
+					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
+					file.toFile(computerCSV);	
+					head=getLinkPosizione(i+1);
+					elementi--;
+					System.out.println("Eliminazione del pc eseguita con successo");
+					System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
+				}
+				else
+				{
+				computer=getPc(i);
+				computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
+				file.toFile(computerCSV);	
 				Nodo precedente=getLinkPosizione(i-1);
 				precedente.setLink(p.getLink());
 				elementi--;		
-				return 1;
+				System.out.println("Eliminazione del pc eseguita con successo");
+				System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
+				}
 			}
 		}
-		return 0;
+		file.close();
 	}
 	
 	/**
-	 * Consente di eliminare un pc all'interno della lista inserendo il nome
+	 * Consente di eliminare un pc all'interno della lista inserendo l'identificativo del pc, poi esporta l'identificativo e 
+	 * il nome del pc su un file di testo
 	 * @throws ListaPcException  Eccezione sollevata nel caso in cui nella lista non siano presenti computer
 	 * @throws IOException che si verifica con una mancata lettura
 	 * @throws NumberFormatException che si verifica con un inserimento dato non conforme
@@ -144,95 +168,40 @@ public class ListaPc implements Serializable
 			{
 				if (elementi==1)
 				{
+					computer=getPc(i);
+					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
+					file.toFile(computerCSV);	
 					head=null;
 					elementi--;
 					System.out.println("Eliminazione del pc eseguita con successo");
 					System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
-					computer=getPc(i);
-					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
-					file.toFile(computerCSV);	
 				}
 				else if (i==1)
 				{
+					computer=getPc(i);
+					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
+					file.toFile(computerCSV);	
 					head=getLinkPosizione(i+1);
 					elementi--;
 					System.out.println("Eliminazione del pc eseguita con successo");
 					System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
-					computer=getPc(i);
-					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
-					file.toFile(computerCSV);	
 				}
 				else
 				{
+				computer=getPc(i);
+				computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
+				file.toFile(computerCSV);	
 				Nodo precedente=getLinkPosizione(i-1);
 				precedente.setLink(p.getLink());
 				elementi--;		
 				System.out.println("Eliminazione del pc eseguita con successo");
 				System.out.println("Il nome e l'identificativo del pc verranno salvati sul file di testo pcEliminati.txt" );
-				computer=getPc(i);
-				computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
-				file.toFile(computerCSV);	
 				}
 			}
 		}
 		file.close();
 	}
-	
-	/**	 
-	 * Esporta su un file di testo il nome e l'identificativo del pc eliminato.
-	 * @param nomeFile Nome del file in cui salvare le attività. Il nome deve essere comprensivo del path e 
-	 * dell'estensione del file di testo.
-	 * @throws IOException Eccezione che vien sollevata nel caso non sia possibile accedere al file di testo
-	 * @throws FileException Eccezione che si verifica nel caso in cui il file su cui scrivere è già aperto in lettura.
-	 */
-	public void esportaCSV1(String nomeFile) throws IOException, ListaPcException , FileException 
-	{
-		TextFile file=new TextFile(nomeFile,'W');
-		String computerCSV;
-		Pc computer;
-		Nodo p;
-		String nome;
-		System.out.println("Inserisci il nome del pc ");
-		nome=(tastiera.readString());
-		for (int i = 1; i <= getElementi(); i++) 
-			{
-				p=getLinkPosizione(i);
-				if (p.getInfo().getNome().compareTo(nome)==0)
-				{
-					computer=getPc(i);
-					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
-					file.toFile(computerCSV);	
-				}
-			}
-		file.close();
-	}
-	
-	/**	 
-	 * Esporta su un file di testo il nome e l'identificativo del pc eliminato.
-	 * @param nomeFile Nome del file in cui salvare le attività. Il nome deve essere comprensivo del path e 
-	 * dell'estensione del file di testo.
-	 * @throws IOException Eccezione che vien sollevata nel caso non sia possibile accedere al file di testo
-	 * @throws FileException Eccezione che si verifica nel caso in cui il file su cui scrivere è già aperto in lettura.
-	 */
-	public void esportaCSV2(int identificativo,String nomeFile) throws IOException, ListaPcException , FileException  
-	{
-		TextFile file=new TextFile(nomeFile,'W');
-		String computerCSV;
-		Pc computer;
-		Nodo p;
-		for (int i = 1; i <= getElementi(); i++) 
-			{
-				p=getLinkPosizione(i);
-				if (p.getInfo().getIdentificativo()==identificativo)
-				{
-					computer=getPc(i);
-					computerCSV=computer.getNome()+";"+computer.getIdentificativo()+";";
-					file.toFile(computerCSV);	
-				}
-			}
-		file.close();
-	}
-	
+			
 	/**
 	 * Consente di vendere una quantità id pc in base all'identificativo
 	 * @return
@@ -445,26 +414,29 @@ public class ListaPc implements Serializable
 		}
 		return arrayCopia;
 	}
-	/*
-	public void CopiaLista(Pc computer) throws ListaPcException
+	/**
+	 * Metodo che consiste nel riordinare i nomi delle aziende in ordine alfabetico.
+	 * I nomi delle aziende vengono inserite in un array di stringhe che verra' riordinato.
+	 * @return elencoClienti -> Rappresenta la stringa che contiene i nomi delle aziende riordinate in ordine alfabetico
+	 */
+	public static Pc[] OrdinaPcAlfabeto (Pc[] array) 
 	{
-		if (elementi==0)
+		Pc[] arrayCopia=copiaArray(array);
+		int j=0;
+		Nodo p = head;
+		for (int i = 0; i < getElementi()-1; i++) 
 		{
-			throw new ListaPcException("Nessun pc trovato");
+			if (p!=null)
+			{
+				
+					arrayCopia[j] = p.getInfo().getNome());
+					j++;
+					p = p.getLink();
+			}
 		}
-		ListaPc listaPcCopia=new ListaPc();
-		for (int i = 1; i <=getElementi(); i++)
-		{
-			for (int j = i; j <=getElementi(); j++) 
-			
-		}
+		elencoClienti = Ordinatore.selectionSortCrescente(elencoClienti);
+		return elencoClienti;
 	}
-	
-	public void OrdinaPcPerQuantitàDisponbile2()
-	{
-		
-	}
-	*/
 	
 	/**
 	 * Restituisce una stringa che contiene  l'elenco di tutti i Pc con quantità disponibile inferiore a un 

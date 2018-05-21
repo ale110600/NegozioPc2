@@ -1,5 +1,4 @@
 import java.io.*;
-import java.time.LocalDateTime;
 
 /**
  * Classe di utililità per le operazioni di input dalla tastiera
@@ -31,10 +30,6 @@ public class ConsoleInput
 		return (Integer.parseInt(reader.readLine()));
 	}
 	
-	public LocalDateTime readLocaldateTime()  throws NumberFormatException, IOException
-	{
-		return(LocalDateTime.of(null, null));
-	}
 	
 	/**
 	 * Lettura di un numero double
